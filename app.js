@@ -122,11 +122,13 @@ function checkItem(e){
    if(checkElement.classList.contains("line")){
     checkElement.classList.remove("line")
     checkBtn.innerHTML =`<i class="fas fa-circle"></i>`
+    checkBtn.style.color = `var(--clr-primary-5)`
     checkId    = 0
     setCheck(checkId, elId)
 }else{
     checkElement.classList.add("line")
     checkBtn.innerHTML =`<i class="fas fa-check-circle"></i>`
+    checkBtn.style.color = `var(--clr-green-dark)`
     displayAlert("task completed", "success");
     checkId = new Date().getDate()
     setCheck(checkId, elId)
@@ -247,9 +249,11 @@ function createListItem(id, value, checkId){
     if(checkId === 0){
         lineCheck.classList.remove("line")
         check.innerHTML = `<i class="fas fa-circle"></i>`
+        check.style.color = `var(--clr-primary-5)`
     }else{
         lineCheck.classList.add("line")
         check.innerHTML = `<i class="fas fa-check-circle"></i>`
+        check.style.color = `var(--clr-green-dark)`
     }
     const deleteBtn = element.querySelector(".delete-btn")
     const editBtn   = element.querySelector(".edit-btn")
