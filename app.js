@@ -216,7 +216,11 @@ function setupItems(){
             }
            
         })
-        container.classList.add("show-container")
+        if(list.children.length === 0){
+        container.classList.remove("show-container")
+    }else{
+            container.classList.add("show-container")
+      }
     }
 }
 
