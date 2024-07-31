@@ -238,6 +238,7 @@ function createListItem(id, value, checkId){
     checkAttr.value = checkId
     
     element.setAttributeNode(attr)
+    element.setAttributeNode(checkAttr)
     element.innerHTML = `<button type="button" class="check ckClr">
             <i class="fas fa-circle"></i></button>
         <p class="title">${value}</p>
