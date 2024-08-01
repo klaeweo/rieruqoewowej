@@ -9,6 +9,9 @@ const clearBtn  = document.querySelector(".clear-btn")
 const currentWeek  = document.querySelector(".week")
 const currentDay   = document.querySelector(".date")
 const currentMonth = document.querySelector(".month")
+const dateCenter = document.querySelector(".dateCenter")
+const timeCenter = document.querySelector(".timeCenter")
+const timer = document.querySelector(".timeCenter h2")
 
 // edit option
 let editElement;
@@ -17,6 +20,7 @@ let editID = ''
 // check option
 const currentCheckId    = new Date().getDate()
 let checkId    = 0
+let markCount = 0
 
 // ****** EVENT LISTENERS **********
 //! submit form
@@ -45,7 +49,8 @@ function addItem(e){
     addToLocalStorage(id, value, checkId)
     // set back to default
     setBackToDefault()
-
+    toggler(1)
+    markCount++
     }
     else if(value && editFlag){
         editElement.innerHTML = value;
@@ -85,6 +90,8 @@ function clearItems(){
     displayAlert("empty list", "danger")
     setBackToDefault()
     localStorage.removeItem("list")
+    toggler(0)
+    markCount = 0
 }
 //! delete function
 function deleteItem(e){
@@ -93,11 +100,13 @@ function deleteItem(e){
     list.removeChild(element);
     if(list.children.length === 0){
         container.classList.remove("show-container")
+        toggler(0)
     }
     displayAlert("item removed", "danger");
     setBackToDefault()
     // remove from local storage
     removeFromLocalStorage(id)
+    markCount--
 }
 //! edit function
 function editItem(e){
@@ -125,6 +134,7 @@ function checkItem(e){
     checkBtn.style.color = `var(--clr-primary-5)`
     checkId    = 0
     setCheck(checkId, elId)
+    markCount++
 }else{
     checkElement.classList.add("line")
     checkBtn.innerHTML =`<i class="fas fa-check-circle"></i>`
@@ -132,6 +142,12 @@ function checkItem(e){
     displayAlert("task completed", "success");
     checkId = new Date().getDate()
     setCheck(checkId, elId)
+    markCount--
+   }
+    if(markCount > 0){
+    toggler(1)
+   }else{
+    toggler(0)
    }
 }
 
@@ -188,14 +204,6 @@ function setCheck(checkId, elId){
 function getLocalStorage(){
     return localStorage.getItem("list")?JSON.parse(localStorage.getItem("list")):[]
 }
-// localStorage API
-// setItem
-// getItem
-// removeItem
-// save as strings
-// localStorage.setItem("orange", JSON.stringify(["item","item2"]))
-// const oranges = JSON.parse(localStorage.getItem("orange"))
-// localStorage.removeItem("orange")
 // ****** SETUP ITEMS **********
 
 function setupItems(){
@@ -221,6 +229,9 @@ function setupItems(){
     }else{
             container.classList.add("show-container")
       }
+        toggler(1)
+     }else{
+        toggler(0)
     }
 }
 
@@ -295,7 +306,6 @@ const months = [
     "Saturday",
   ];
 
-
   const currentDate = new Date()
   const weekday     = weekdays[currentDate.getDay()]
   const date        = currentDate.getDate()
@@ -304,3 +314,60 @@ const months = [
   currentWeek.innerHTML = weekday
   currentDay.innerHTML  = date
   currentMonth.innerHTML = month
+
+const futureDate = new Date()
+futureDate.setHours(22,30,0)
+
+const futureTime = futureDate.getTime()
+
+function getRemainingTime(){
+    const today = new Date().getTime()
+    const t = futureTime-today
+  
+    // values in ms
+    const oneDay = 24*60*60*1000
+    const oneHour = 60*60*1000
+    const oneMinute = 60*1000
+  
+    // calculate all values
+    let days = Math.floor(t/oneDay)
+    let hours = Math.floor((t % oneDay)/oneHour)
+    let minutes = Math.floor((t % oneHour)/oneMinute)
+    let seconds = Math.floor((t % oneMinute)/1000)
+  
+  // set values array;
+    let values = [hours, minutes, seconds]
+
+    for(let i=0; i<values.length; i++){
+        let item = values[i]
+        if(item < 10){
+            item = `0${item}`
+            values[i] = item
+        }
+    }
+   
+    if(values[0]=== `00`){
+    timer.innerHTML  = `${values[1]} : ${values[2]}`
+    }else{
+        timer.innerHTML  = `${values[0]} : ${values[1]} : ${values[2]}`
+    }
+    
+    if(t < 0){
+      clearInterval(countdown);
+      timer.innerHTML = `Today is over!`
+    }
+  }  
+  // countdown
+  let countdown = setInterval(getRemainingTime, 1000)
+  
+  getRemainingTime()
+
+  function toggler(val){
+    if(val === 0){
+        timeCenter.classList.add("hideEl")
+        dateCenter.classList.remove("hideEl")
+    }else if(val === 1){
+        timeCenter.classList.remove("hideEl")
+        dateCenter.classList.add("hideEl")
+    }
+  }
