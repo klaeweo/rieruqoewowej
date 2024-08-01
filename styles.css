@@ -342,7 +342,7 @@ Grocery List
   margin-bottom: 0%;
 }
 
-.dateCenter {
+.cal {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -354,18 +354,4 @@ Grocery List
 
 .ckClr{
   color : var(--clr-primary-5);
-}
-
-.timeCenter{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.timeCenter h2{
-  margin-bottom: 0%;
-}
-
-.hideEl {
-  display: none;
 }
